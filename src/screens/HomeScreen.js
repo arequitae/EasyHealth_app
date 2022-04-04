@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, SafeAreaView, ScrollView, TextInput,TouchableOpacity } from 'react-native';
 import { ProgressChart } from "react-native-chart-kit";
 import Task from "./Task";
-import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+import {KeyboardAvoidingView} from "react-native";
+import { getHeight,getWidth } from "../utils/Adapter";
+
 
 const chartConfig = {
     backgroundColor: "#e26a00",
@@ -46,7 +48,10 @@ const HomeScreen = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView
+                    style={styles.container}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: getHeight(29) }}>
             <View style={{ padding: 8, margin: 8 }}>
                 <Text style={styles.textTitle}>Today's Tasks</Text>
                 <View style={styles.items}>
@@ -71,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
                     <TextInput style={styles.input} placeholder={"Write a task"} value = {task} onChangeText={text =>setTask(text)}/>
                     <TouchableOpacity>
                     <View style={styles.addWrapper}>
-                        <Text style={styles.addText}  onPress={()=>handleAddTask()}>   +</Text>
+                        <Text style={styles.addText}  onPress={()=>handleAddTask()}>+</Text>
                     </View>
                 </TouchableOpacity>
                 </KeyboardAvoidingView>
@@ -86,25 +91,20 @@ const HomeScreen = ({ navigation }) => {
                 <View>
                     <ProgressChart
                         data={data}
-                        width={370}
-                        height={200}
-                        strokeWidth={16}
-                        radius={32}
+                        width={getWidth(330)}
+                        height={getWidth(200)}
+                        strokeWidth={getWidth(16)}
+                        radius={getWidth(32)}
                         chartConfig={chartConfig}
                         hideLegend={false}
                         style={{
-                            marginVertical: 8,
-                            borderRadius: 16
+                            marginVertical: getHeight(10),
+                            borderRadius: getWidth(16)
                         }}
                     />
                 </View>
             </View>
-
-
-
-
-        </View>
-
+        </ScrollView>
 
 
 
@@ -126,40 +126,38 @@ const styles = StyleSheet.create({
         color: "black"
     },
     items: {
-        marginTop: 30
+        marginTop: getHeight(30)
     },
     writeTaskWrapper: {
         position: "relative",
-        bottom: 10,
+        bottom: getHeight(10),
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center"
     },
     input: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        width: 250,
+        paddingVertical: getHeight(10),
+        paddingHorizontal: getWidth(15),
+        width: getHeight(250),
         backgroundColor: "#fff",
-        borderRadius: 60,
+        borderRadius: getWidth(60),
         borderColor: "#802115",
-        borderWidth:2,
-        width:250
+        borderWidth:getWidth(2)
     },
     addWrapper:{
-        width:40,
-        height:40,
+        width:getWidth(40),
+        height:getWidth(40),
         backgroundColor:"#fff",
-        borderRadius:60,
+        borderRadius:getWidth(40),
         justifyContent:"center",
         borderColor: "#802115",
-        borderWidth:2,
-
+        borderWidth:getWidth(2),
+       
     },
     addText:{
         fontSize:18,
-        
-
+        textAlign:'center'
     }
  
 

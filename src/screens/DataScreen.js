@@ -1,10 +1,13 @@
-import React, { Component,useState } from "react";
+import React, { Component,useEffect,useState } from "react";
 import { View, Text, Button, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions, TextInput } from 'react-native';
 import CardView from "react-native-cardview-wayne";
 import { LineChart } from "react-native-chart-kit";
+import { getHeight,getWidth } from "../utils/Adapter";
+import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
+
 
 const data ={
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "June"],
     datasets: [{data: [50, 47, 52, 60, 55, 54]}]
 }
 
@@ -28,12 +31,26 @@ const chartConfig ={
 const DataScreen = ({navigation}) =>{
    const [weight, setWeight] = useState(0);
    const [height, setHeight] = useState(0);
+   const [goal,setGoal]=useState("")
+    useEffect(()=>{
+        readOBjLikeData('body_data')
+            .then((v)=>
+            {   
+                v=JSON.parse(v)
+                if(v.weight)
+                    setWeight(v.weight);
+                if(v.height)
+                    setHeight(v.height);
+                if(v.goal)
+                    setGoal(v.goal)
+            })
+    },[])
    
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 29 }}>
+                    contentContainerStyle={{ paddingBottom: getHeight(29) }}>
                     <View style={styles.profileInfos} row aCenter>
                         <Image style={styles.image} source={require('./1.jpg')} />
                         <View style={styles.nameSection}>
@@ -42,52 +59,60 @@ const DataScreen = ({navigation}) =>{
                     </View>
                     <CardView style={{
                         marginHorizontal: 8,
-                        marginTop: 5
+                        marginTop: 5,
+                        // width:getWidth(331)
                     }}
                         cardElevation={4}
                         maxCardElevation={4}
                         radius={10}
                         backgroundColor={'#ffffff'}>
-                        <View style={{ padding: 8, margin: 8 }}>
+                        <View style={{ padding: getHeight(8), margin: getHeight(8) }}>
                             <View>
                                 <Text style={styles.textTitle}>Goal:</Text>
                             </View>
                             <View>
                                 <TextInput
                                     style={styles.textInputStyle}
-                                    placeholder="Lost Weight"
+                                    placeholder="Try something new ~~"
+                                    value={goal}
+                                    onChangeText={(e)=>{setGoal(e)}}
+                                    onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
                                 ></TextInput>
                             </View>
                         </View>
                     </CardView>
                     <View style={{
                         flexDirection: 'row',
-                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        paddingHorizontal:getWidth(5)
+                       
                     }}>
                         <CardView style={{
-                            marginHorizontal: 8,
-                            marginTop: 3
+                            // marginHorizontal: 8,
+                            marginTop: 3,
+                            width:getWidth(112)
                         }}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
                             backgroundColor={'#ffffff'}>
                             <View style={{
-                                padding: 8,
-                                margin: 8,
+                                padding: getHeight(8), margin: getHeight(8),
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
                                 <View>
                                     <View>
-                                        <Text style={styles.textTitle}>Weight:      </Text>
+                                        <Text style={styles.textTitle}>Weight:</Text>
                                     </View>
                                     <View>
                                         <TextInput
                                             style={styles.textInputStyle}
-                                            placeholder="50"
+                                            placeholder="kg"
+                                            value={""+weight}
                                             keyboardType="number-pad"
                                             onChangeText={(e)=>{setWeight(e)}}
+                                            onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
                                         ></TextInput>
                                     </View>
                                 </View>
@@ -95,51 +120,53 @@ const DataScreen = ({navigation}) =>{
                         </CardView>
 
                         <CardView style={{
-                            marginHorizontal: 1,
-                            marginTop: 3
+                            // marginHorizontal: 1,
+                            marginTop: 3,
+                            width:getWidth(112)
                         }}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
                             backgroundColor={'#ffffff'}>
                             <View style={{
-                                padding: 8,
-                                margin: 8,
+                                padding: getHeight(8), margin: getHeight(8),
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
                                 <View>
                                     <View> 
-                                        <Text style={styles.textTitle}>Height:       </Text>
+                                        <Text style={styles.textTitle}>Height:</Text>
                                     </View>
                                     <View>
                                     <TextInput
                                             style={styles.textInputStyle}
-                                            placeholder="170"
+                                            placeholder="cm"
                                             keyboardType="number-pad"
+                                            value={""+height}
                                             onChangeText={(e)=>{setHeight(e)}}
+                                            onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
                                         ></TextInput>
                                     </View>
                                 </View>
                             </View>
                         </CardView>
                         <CardView style={{
-                            marginHorizontal: 5,
-                            marginTop: 3
+                            // marginHorizontal: 5,
+                            marginTop: 3,
+                            width:getWidth(112)
                         }}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
                             backgroundColor={'#ffffff'}>
                             <View style={{
-                                padding: 8,
-                                margin: 8,
+                                padding: getHeight(8), margin: getHeight(8),
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
                                 <View>
                                     <View>
-                                        <Text style={styles.textTitle}>BMI:         </Text>
+                                        <Text style={styles.textTitle}>BMI:</Text>
                                     </View>
                                     <View>
                                     <TextInput
@@ -156,8 +183,8 @@ const DataScreen = ({navigation}) =>{
                         <Text style={styles.textTitle}>Weight Trend</Text>
                         <LineChart
                             data={data}
-                            width={370} // from react-native
-                            height={200}
+                            width={getWidth(331)} // from react-native
+                            height={getHeight(200)}
                             yAxisSuffix="kg"
                             yAxisInterval={2} // optional, defaults to 1
                             chartConfig={chartConfig}
@@ -182,22 +209,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff'
     },
     profileInfos: {
-        marginTop: 16,
-        paddingHorizontal: 29,
+        marginTop: getHeight(16),
+        paddingHorizontal: getHeight(29),
         flexDirection: 'row',
         alignItems: 'center',
 
     },
     image: {
-        width: 60,
-        height: 60,
-        borderRadius: 60,
+        width: getWidth(60),
+        height:  getWidth(60),
+        borderRadius:  getWidth(60),
         borderColor: "#dddddd",
         borderWidth: 1,
         backgroundColor: "#dcdcdc"
     },
     nameSection: {
-        marginLeft: 40
+        marginLeft:  getWidth(40)
     },
     textInputStyle: {
         fontSize: 20,

@@ -1,5 +1,6 @@
 import React from "react";
 import{View, Text, StyleSheet} from "react-native";
+import { getWidth,getHeight } from './../utils/Adapter';
 
 
 const Task = (props) =>{
@@ -18,12 +19,12 @@ const Task = (props) =>{
 const styles = StyleSheet.create({
     item:{
         backgroundColor:"#FFE3AA",
-        padding:15,
-        borderRadius:20,
+        padding:getHeight(15),
+        borderRadius:getWidth(20),
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between",
-        marginBottom:20,
+        marginBottom:getHeight(20),
 
     },
     itemLeft:{
@@ -33,22 +34,22 @@ const styles = StyleSheet.create({
 
     },
     square:{
-        width:24,
-        height:24,
+        width:getWidth(24),
+        height:getWidth(24),
         backgroundColor:"#802115",
         opacity:0.4,
-        borderRadius:5,
-        marginRight:15,
+        borderRadius:getWidth(5),
+        marginRight:getWidth(15),
     },
     itemText:{
         maxWidth:"80%",
     },
     circular:{
-        width:12,
-        height:12,
+        width:getWidth(12),
+        height:getWidth(12),
         borderColor:"#802115",
-        borderWidth:2,
-        borderRadius:5
+        borderWidth:getWidth(2),
+        borderRadius:getWidth(5)
     }
 
 });

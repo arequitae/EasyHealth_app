@@ -5,7 +5,9 @@ import Tabs from "./src/navigation/navigation";
 
 
 class App extends Component{
+
   render(){
+
   return(
     <NavigationContainer>
       <Tabs />
