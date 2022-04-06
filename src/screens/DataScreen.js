@@ -3,7 +3,7 @@ import { View, Text, Button, Image, StyleSheet, SafeAreaView, ScrollView, Dimens
 import CardView from "react-native-cardview-wayne";
 import { LineChart } from "react-native-chart-kit";
 import { getHeight,getWidth } from "../utils/Adapter";
-import { formatNowDate } from "../utils/Data";
+import { formatNowDate } from "../utils/DateUtils";
 import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
 
 

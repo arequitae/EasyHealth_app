@@ -5,7 +5,8 @@ function getWeek() {
     return date.getDay();
 }
 
-function formatNowDate(){
+function formatNowDate(fmt){
+    
     Date.prototype.Format = function (fmt) { 
         var o = {
             "M+": this.getMonth() + 1, //月份
@@ -22,6 +23,8 @@ function formatNowDate(){
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+    if(fmt)
+        return(new Date()).Format(fmt);
     return (new Date()).Format("MM-dd");
 }
 
