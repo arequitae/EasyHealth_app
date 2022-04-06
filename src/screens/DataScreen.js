@@ -3,13 +3,11 @@ import { View, Text, Button, Image, StyleSheet, SafeAreaView, ScrollView, Dimens
 import CardView from "react-native-cardview-wayne";
 import { LineChart } from "react-native-chart-kit";
 import { getHeight,getWidth } from "../utils/Adapter";
+import { formatNowDate } from "../utils/Data";
 import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
 
 
-const data ={
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "June"],
-    datasets: [{data: [50, 47, 52, 60, 55, 54]}]
-}
+
 
 const chartConfig ={
     backgroundColor: "#e26a00",
@@ -28,14 +26,46 @@ const chartConfig ={
     }
 }
 
+
+
 const DataScreen = ({navigation}) =>{
    const [weight, setWeight] = useState(0);
    const [height, setHeight] = useState(0);
    const [goal,setGoal]=useState("")
+   const [history,setHistory]=useState(null); 
+   const updateHistory=(v)=>{
+
+    v=JSON.parse(v);                                       
+    let len=v.length;
+    
+    if(len>=1&&v[len-1][0]==formatNowDate()){
+        v[len-1][1]=Number(weight);
+    }                                             
+    else{
+        if(len==7)
+            v.shift();
+        v.push([formatNowDate(),Number(weight)])
+    }
+    saveObjLikeData(v,'history')
+        .then(readOBjLikeData.bind(null,'history'))
+        .then((v)=>{
+            let labels=[];
+            let data=[];
+            v=JSON.parse(v)
+            for(let i of v){
+                labels.push(i[0]);
+                data.push(i[1]);
+                
+            }
+            console.log("wow");
+            setHistory({labels,datasets:[{data}]})
+        }).catch((e)=>{console.log(e)})   
+    }
     useEffect(()=>{
         readOBjLikeData('body_data')
             .then((v)=>
-            {   
+            {   if(!v)
+                    return;
                 v=JSON.parse(v)
                 if(v.weight)
                     setWeight(v.weight);
@@ -44,6 +74,20 @@ const DataScreen = ({navigation}) =>{
                 if(v.goal)
                     setGoal(v.goal)
             })
+        readOBjLikeData('history').then((v)=>{
+            if(!v)
+                return;
+            let labels=[];
+            let data=[];
+            v=JSON.parse(v)
+           
+            for(let i of v){
+               
+                labels.push(i[0]);
+                data.push(i[1]);
+            }
+            setHistory({labels,datasets:[{data}]})
+        }).catch((e)=>{console.log(e)})
     },[])
    
         return (
@@ -112,7 +156,18 @@ const DataScreen = ({navigation}) =>{
                                             value={""+weight}
                                             keyboardType="number-pad"
                                             onChangeText={(e)=>{setWeight(e)}}
-                                            onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
+                                            onBlur={()=>{
+                                                saveObjLikeData({weight,height,goal},"body_data");
+                                                readOBjLikeData('history')
+                                                .then((v)=>{
+                                                    if(!v){
+                                                        saveObjLikeData([],'history')
+                                                        .then(updateHistory.bind(null,"[]"));
+                                                        return;
+                                                    }
+                                                    updateHistory(v);
+                                                })                                 
+                                            }}
                                         ></TextInput>
                                     </View>
                                 </View>
@@ -181,8 +236,14 @@ const DataScreen = ({navigation}) =>{
                     </View>
                     <View style={{ padding: 8, margin: 8 }}>
                         <Text style={styles.textTitle}>Weight Trend</Text>
+                        {history==null?
+                        <View style={styles.textHolder}>
+                            <Text style={styles.textHolder}>No Data</Text>
+                        </View>
+                        
+                        :
                         <LineChart
-                            data={data}
+                            data={history}
                             width={getWidth(331)} // from react-native
                             height={getHeight(200)}
                             yAxisSuffix="kg"
@@ -193,7 +254,7 @@ const DataScreen = ({navigation}) =>{
                                 marginVertical: 8,
                                 borderRadius: 16
                             }}
-                        />
+                        />}
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -241,6 +302,17 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         letterSpacing: 1,
         color: "grey"
+    },
+    textHolder:{
+        width:getWidth(331),
+        height:getHeight(200),
+        borderRadius:  getWidth(20),
+        backgroundColor:'rgba(253, 151, 15,0.8)',
+        flexDirection:'column',
+        textAlign:"center",
+        lineHeight:getHeight(200),
+        fontSize: 32,
+        color:'lightgrey'
     }
 }
 )

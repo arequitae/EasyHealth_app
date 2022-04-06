@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Dialogflow_V2 } from 'react-native-dialogflow';
 import { dialogflowConfig } from '../utils/env';
+import { saveObjLikeData,readOBjLikeData,DeleteData } from '../utils/dataStorage';
 const botAvater = require('./1.jpg')
 
 const BOT = {
@@ -14,18 +15,18 @@ const BOT = {
 class ChatScreen extends Component {
   state = {
     messages: [
-      {
-        _id: 2,
-        text: 'Hi! I am the eHeath bot.',
-        createdAt: new Date(),
-        user: BOT
-      },
-      {
-        _id: 1,
-        text: 'How may I help you with today?',
-        createdAt: new Date(),
-        user: BOT
-      },
+      // {
+      //   _id: 2,
+      //   text: 'Hi! I am the eHeath bot.',
+      //   createdAt: new Date(),
+      //   user: BOT
+      // },
+      // {
+      //   _id: 1,
+      //   text: 'How may I help you with today?',
+      //   createdAt: new Date(),
+      //   user: BOT
+      // },
     ]
   };
 
@@ -36,6 +37,13 @@ class ChatScreen extends Component {
       Dialogflow_V2.LANG_ENGLISH_US,
       dialogflowConfig.project_id
     );
+    readOBjLikeData("message").
+    then(
+      (historyMessages)=>{
+        if(historyMessages)
+          this.setState({messages:JSON.parse(historyMessages)})
+      }
+    )
   }
 
 
@@ -56,7 +64,7 @@ class ChatScreen extends Component {
 
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, [msg])
-    }));
+    }),()=>{saveObjLikeData(this.state.messages,"message")});
   }
 
   onSend(messages = []) {

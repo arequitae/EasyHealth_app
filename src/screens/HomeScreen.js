@@ -4,6 +4,7 @@ import { ProgressChart } from "react-native-chart-kit";
 import Task from "./Task";
 import {KeyboardAvoidingView} from "react-native";
 import { getHeight,getWidth } from "../utils/Adapter";
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 
 const chartConfig = {
@@ -92,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
                     <ProgressChart
                         data={data}
                         width={getWidth(330)}
-                        height={getWidth(200)}
+                        height={getWidth(210)}
                         strokeWidth={getWidth(16)}
                         radius={getWidth(32)}
                         chartConfig={chartConfig}
@@ -104,6 +105,8 @@ const HomeScreen = ({ navigation }) => {
                     />
                 </View>
             </View>
+    
+
         </ScrollView>
 
 
