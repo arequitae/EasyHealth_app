@@ -1,11 +1,11 @@
 import React, { Component,useEffect,useState } from "react";
-import { View, Text, Button, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions, TextInput } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, SafeAreaView, ScrollView, Alert, TextInput } from 'react-native';
 import CardView from "react-native-cardview-wayne";
 import { LineChart } from "react-native-chart-kit";
 import { getHeight,getWidth } from "../utils/Adapter";
 import { formatNowDate } from "../utils/DateUtils";
 import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
-
+import { CheckCalendar } from "../basicComponent/Calendar";
 
 
 
@@ -26,6 +26,24 @@ const chartConfig ={
     }
 }
 
+const alertData=(...args)=>{
+    let map=args[0];
+    let key=args[1];
+    let arr=map.get(key);
+    if(arr){
+        Alert.alert(
+            `${key}`,
+            `Your weight is ${arr[0]}kg and height is ${arr[1]}cm`
+        )
+    }
+    else{
+        Alert.alert(
+            `${key}`,
+            `Your didn't save data!`
+        )
+    }
+}
+
 
 
 const DataScreen = ({navigation}) =>{
@@ -35,32 +53,29 @@ const DataScreen = ({navigation}) =>{
    const [history,setHistory]=useState(null); 
    const updateHistory=(v)=>{
 
-    v=JSON.parse(v);                                       
-    let len=v.length;
-    
-    if(len>=1&&v[len-1][0]==formatNowDate()){
-        v[len-1][1]=Number(weight);
-    }                                             
-    else{
-        if(len==7)
-            v.shift();
-        v.push([formatNowDate(),Number(weight)])
+        v=JSON.parse(v);                                       
+        let len=v.length;
+        if(len>=1&&v[len-1][0]==formatNowDate('yyyy-MM-dd')){
+            v[len-1][1]=Number(weight);
+            v[len-1][2]=Number(height)
+        }                                             
+        else{
+            // if(len==7)
+            //     v.shift();
+            v.push([formatNowDate('yyyy-MM-dd'),Number(weight),Number(height)])
+        }
+        saveObjLikeData(v,'history')
+            .then(readOBjLikeData.bind(null,'history'))
+            .then((v)=>{
+                let map=new Map();
+                v=JSON.parse(v)
+                for(let i of v){
+                    map.set(i[0],[i[1],i[2]]);
+                }
+                setHistory(map)
+            }).catch((e)=>{console.log(e)})   
     }
-    saveObjLikeData(v,'history')
-        .then(readOBjLikeData.bind(null,'history'))
-        .then((v)=>{
-            let labels=[];
-            let data=[];
-            v=JSON.parse(v)
-            for(let i of v){
-                labels.push(i[0]);
-                data.push(i[1]);
-                
-            }
-            console.log("wow");
-            setHistory({labels,datasets:[{data}]})
-        }).catch((e)=>{console.log(e)})   
-    }
+
     useEffect(()=>{
         readOBjLikeData('body_data')
             .then((v)=>
@@ -77,20 +92,16 @@ const DataScreen = ({navigation}) =>{
         readOBjLikeData('history').then((v)=>{
             if(!v)
                 return;
-            let labels=[];
-            let data=[];
-            v=JSON.parse(v)
-           
-            for(let i of v){
-               
-                labels.push(i[0]);
-                data.push(i[1]);
-            }
-            setHistory({labels,datasets:[{data}]})
+                let map=new Map();
+                v=JSON.parse(v)
+                for(let i of v){
+                    map.set(i[0],[i[1],i[2]]);
+                }
+                setHistory(map)
         }).catch((e)=>{console.log(e)})
     },[])
-   
-        return (
+
+    return (
             <SafeAreaView style={styles.container}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -120,7 +131,8 @@ const DataScreen = ({navigation}) =>{
                                     placeholder="Try something new ~~"
                                     value={goal}
                                     onChangeText={(e)=>{setGoal(e)}}
-                                    onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
+                                    onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")
+                                }}
                                 ></TextInput>
                             </View>
                         </View>
@@ -131,11 +143,7 @@ const DataScreen = ({navigation}) =>{
                         paddingHorizontal:getWidth(5)
                        
                     }}>
-                        <CardView style={{
-                            // marginHorizontal: 8,
-                            marginTop: 3,
-                            width:getWidth(112)
-                        }}
+                        <CardView style={styles.smallCard}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
@@ -174,11 +182,7 @@ const DataScreen = ({navigation}) =>{
                             </View>
                         </CardView>
 
-                        <CardView style={{
-                            // marginHorizontal: 1,
-                            marginTop: 3,
-                            width:getWidth(112)
-                        }}
+                        <CardView style={styles.smallCard}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
@@ -199,17 +203,24 @@ const DataScreen = ({navigation}) =>{
                                             keyboardType="number-pad"
                                             value={""+height}
                                             onChangeText={(e)=>{setHeight(e)}}
-                                            onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data")}}
+                                            onBlur={()=>{saveObjLikeData({weight,height,goal},"body_data");
+                                            readOBjLikeData('history')
+                                            .then((v)=>{
+                                                if(!v){
+                                                    saveObjLikeData([],'history')
+                                                    .then(updateHistory.bind(null,"[]"));
+                                                    return;
+                                                }
+                                            updateHistory(v);
+                                    })    
+                                        
+                                        }}
                                         ></TextInput>
                                     </View>
                                 </View>
                             </View>
                         </CardView>
-                        <CardView style={{
-                            // marginHorizontal: 5,
-                            marginTop: 3,
-                            width:getWidth(112)
-                        }}
+                        <CardView style={styles.smallCard}
                             cardElevation={4}
                             maxCardElevation={4}
                             radius={10}
@@ -235,26 +246,9 @@ const DataScreen = ({navigation}) =>{
                         </CardView>
                     </View>
                     <View style={{ padding: 8, margin: 8 }}>
-                        <Text style={styles.textTitle}>Weight Trend</Text>
-                        {history==null?
-                        <View style={styles.textHolder}>
-                            <Text style={styles.textHolder}>No Data</Text>
-                        </View>
+                        <Text style={styles.textTitle}>Body Calendar</Text>
+                        {<CheckCalendar days={history?Array.from(history.keys()):[]} callback={alertData.bind(null,history)} />}
                         
-                        :
-                        <LineChart
-                            data={history}
-                            width={getWidth(331)} // from react-native
-                            height={getHeight(200)}
-                            yAxisSuffix="kg"
-                            yAxisInterval={2} // optional, defaults to 1
-                            chartConfig={chartConfig}
-                            bezier
-                            style={{
-                                marginVertical: 8,
-                                borderRadius: 16
-                            }}
-                        />}
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -313,6 +307,12 @@ const styles = StyleSheet.create({
         lineHeight:getHeight(200),
         fontSize: 32,
         color:'lightgrey'
+    },
+    smallCard:{
+        // marginHorizontal: 1,
+        marginTop: 3,
+        width:getWidth(112),
+        height:getHeight(112)
     }
 }
 )
