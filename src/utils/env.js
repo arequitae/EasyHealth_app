@@ -11,5 +11,7 @@ export const dialogflowConfig = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ehealth%40chatbox-sasx.iam.gserviceaccount.com"
 };
 
+export const apiUrl="192.168.2.6:8887"
+
 
   
