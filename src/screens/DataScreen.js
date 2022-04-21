@@ -33,8 +33,21 @@ const alertData = (...args) => {
 const DataScreen = ({ navigation }) => {
     const [weight, setWeight] = useState(0);
     const [height, setHeight] = useState(0);
+    const [bodyData,setBodyData]=useState({
+        weight:0,
+        height:0,
+        lastSleepTime:0,
+        water:0,
+        thighCir:0,
+        calfCir:0
+    });
     const [goal, setGoal] = useState("")
     const [history, setHistory] = useState(null);
+    const changeText=(e,key)=>{
+        let newBodyData={...bodyData}
+        newBodyData[key]=e
+        setBodyData(newBodyData);
+    }
     const updateHistory = (v) => {
 
         v = JSON.parse(v);
@@ -96,6 +109,7 @@ const DataScreen = ({ navigation }) => {
                         <Text style={styles.textWelcome}>Hello, Kylie</Text>
                     </View>
                 </View>
+                {/* 目标 */}
                 <CardView style={{
                     marginHorizontal: 8,
                     marginTop: 5,
@@ -128,6 +142,7 @@ const DataScreen = ({ navigation }) => {
                     paddingHorizontal: getWidth(5)
 
                 }}>
+                    {/* 体重 */}
                     <CardView style={styles.smallCard}
                         cardElevation={4}
                         maxCardElevation={4}
@@ -146,9 +161,9 @@ const DataScreen = ({ navigation }) => {
                                     <TextInput
                                         style={styles.textInputStyle}
                                         placeholder="kg"
-                                        value={"" + weight}
+                                        value={"" + bodyData.weight}
                                         keyboardType="number-pad"
-                                        onChangeText={(e) => { setWeight(e) }}
+                                        onChangeText={e=>changeText(e,'weight')}
                                         onBlur={() => {
                                             saveObjLikeData({ weight, height, goal }, "body_data");
                                             readOBjLikeData('history')
@@ -166,7 +181,7 @@ const DataScreen = ({ navigation }) => {
                             </View>
                         </View>
                     </CardView>
-
+                    {/* 身高 */}
                     <CardView style={styles.smallCard}
                         cardElevation={4}
                         maxCardElevation={4}
@@ -186,8 +201,8 @@ const DataScreen = ({ navigation }) => {
                                         style={styles.textInputStyle}
                                         placeholder="cm"
                                         keyboardType="number-pad"
-                                        value={"" + height}
-                                        onChangeText={(e) => { setHeight(e) }}
+                                        value={"" + bodyData.height}
+                                        onChangeText={e=>changeText(e,'height')}
                                         onBlur={() => {
                                             saveObjLikeData({ weight, height, goal }, "body_data");
                                             readOBjLikeData('history')
@@ -206,6 +221,7 @@ const DataScreen = ({ navigation }) => {
                             </View>
                         </View>
                     </CardView>
+                    {/* BMI */}
                     <CardView style={styles.smallCard}
                         cardElevation={4}
                         maxCardElevation={4}
@@ -224,7 +240,7 @@ const DataScreen = ({ navigation }) => {
                                     <TextInput
                                         style={styles.textInputStyle}
                                         editable={false}
-                                        value={String((Number(weight) / (Math.pow((Number(height) / 100), 2))).toFixed(2))}
+                                        value={String((Number(bodyData.weight) / (Math.pow((Number(bodyData.height) / 100), 2))).toFixed(2))}
                                     ></TextInput>
                                 </View>
                             </View>
@@ -239,6 +255,7 @@ const DataScreen = ({ navigation }) => {
                             paddingHorizontal: getWidth(5)
 
                         }}>
+                            {/* 睡眠 */}
                             <CardView style={styles.midCard}
                                 cardElevation={4}
                                 maxCardElevation={4}
@@ -256,10 +273,10 @@ const DataScreen = ({ navigation }) => {
                                         <View>
                                             <TextInput
                                                 style={styles.textInputStyle}
-                                                placeholder="cm"
+                                                placeholder="hours"
                                                 keyboardType="number-pad"
-                                                value={"" + height}
-                                                onChangeText={(e) => { setHeight(e) }}
+                                                value={"" + bodyData.lastSleepTime}
+                                                onChangeText={(e) => { changeText(e,'lastSleepTime')}}
                                                 onBlur={() => {
                                                     saveObjLikeData({ weight, height, goal }, "body_data");
                                                     readOBjLikeData('history')
@@ -278,6 +295,7 @@ const DataScreen = ({ navigation }) => {
                                     </View>
                                 </View>
                             </CardView>
+                            {/* 喝水 */}
                             <CardView style={styles.midCard}
                                 cardElevation={4}
                                 maxCardElevation={4}
@@ -290,15 +308,15 @@ const DataScreen = ({ navigation }) => {
                                 }}>
                                     <View>
                                         <View>
-                                            <Text style={styles.textTitle}>Water Drink(ml):</Text>
+                                            <Text style={styles.textTitle}>Water Drink:</Text>
                                         </View>
                                         <View>
                                             <TextInput
                                                 style={styles.textInputStyle}
-                                                placeholder="cm"
+                                                placeholder="ml"
                                                 keyboardType="number-pad"
-                                                value={"" + height}
-                                                onChangeText={(e) => { setHeight(e) }}
+                                                value={"" + bodyData.water}
+                                                onChangeText={(e) => { changeText(e,'water')}}
                                                 onBlur={() => {
                                                     saveObjLikeData({ weight, height, goal }, "body_data");
                                                     readOBjLikeData('history')
@@ -318,6 +336,7 @@ const DataScreen = ({ navigation }) => {
                                 </View>
                             </CardView>
                         </View>
+                        {/* 大腿 */}
                         <CardView style={styles.largeCard}
                             cardElevation={4}
                             maxCardElevation={4}
@@ -330,15 +349,15 @@ const DataScreen = ({ navigation }) => {
                             }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <View>
-                                        <Text style={styles.largecardtextTitle}>Thigh circumference(cm):   </Text>
+                                        <Text style={styles.largecardtextTitle}>Thigh circumference:   </Text>
                                     </View>
                                     <View>
                                         <TextInput
                                             style={styles.textInputStyle}
                                             placeholder="cm"
                                             keyboardType="number-pad"
-                                            value={"" + height}
-                                            onChangeText={(e) => { setHeight(e) }}
+                                            value={"" + bodyData.thighCir}
+                                            onChangeText={(e) => { changeText(e,'thighCir')}}
                                             onBlur={() => {
                                                 saveObjLikeData({ weight, height, goal }, "body_data");
                                                 readOBjLikeData('history')
@@ -357,6 +376,7 @@ const DataScreen = ({ navigation }) => {
                                 </View>
                             </View>
                         </CardView>
+                        {/* 小腿 */}
                         <CardView style={styles.largeCard}
                             cardElevation={4}
                             maxCardElevation={4}
@@ -369,15 +389,15 @@ const DataScreen = ({ navigation }) => {
                             }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <View>
-                                        <Text style={styles.largecardtextTitle}>Calf Circumference(cm):   </Text>
+                                        <Text style={styles.largecardtextTitle}>Calf Circumference:   </Text>
                                     </View>
                                     <View>
                                         <TextInput
                                             style={styles.textInputStyle}
                                             placeholder="cm"
                                             keyboardType="number-pad"
-                                            value={"" + height}
-                                            onChangeText={(e) => { setHeight(e) }}
+                                            value={"" + bodyData.calfCir}
+                                            onChangeText={(e) => { changeText(e,'calfCir')}}
                                             onBlur={() => {
                                                 saveObjLikeData({ weight, height, goal }, "body_data");
                                                 readOBjLikeData('history')
