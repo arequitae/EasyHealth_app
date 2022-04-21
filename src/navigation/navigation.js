@@ -21,7 +21,7 @@ const EHeathChatBarButton = ({ children, onPress }) => (
       width: 50,
       height: 50,
       borderRadius: 35,
-      backgroundColor: "#e32f45"
+      backgroundColor: "#3498DB"
 
     }}>
       {children}
@@ -44,7 +44,7 @@ const Tabs = () => {
           letterSpacing:2
         },
         "headerTitleAlign": 'center',
-        "headerTintColor":"red",
+        "headerTintColor":"#3498DB",
         "tabBarShowLabel": false,
         "tabBarStyle": [
           {
@@ -87,7 +87,8 @@ const Tabs = () => {
               style={{
                 width: 50,
                 height: 50,
-                tintColor: "#fff"
+                tintColor: "#fff",
+
               }}
             />
           ),
