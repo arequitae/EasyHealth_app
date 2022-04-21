@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { Component } from 'react';
 import Tabs from "./src/navigation/navigation";
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './src/screens/loginScreen';
+import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/registerScreen';
 
 

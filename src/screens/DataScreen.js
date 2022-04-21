@@ -6,6 +6,7 @@ import { formatNowDate } from "../utils/DateUtils";
 import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
 import { CheckCalendar } from "../basicComponent/Calendar";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import { getToken } from "../utils/Storage";
 
 
 
@@ -74,6 +75,7 @@ const DataScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
+        readBodyData();
         readOBjLikeData('body_data')
             .then((v) => {
                 if (!v)
@@ -97,6 +99,51 @@ const DataScreen = ({ navigation }) => {
             setHistory(map)
         }).catch((e) => { console.log(e) })
     }, [])
+
+    const saveBodyData=()=>{
+        getToken()
+        .then(
+            (token)=>{
+                let url=`http://${global.serverUrl}/userdata/savebodydata`
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    },
+                    body: JSON.stringify(bodyData)
+                    // JSON.stringify({
+                    //    bodydata:JSON.stringify(bodyData)
+                    // })
+                });
+            }
+        )
+        
+    }
+
+    const readBodyData=()=>{
+        getToken()
+        .then(
+            (token)=>{
+                let url=`http://${global.serverUrl}/userdata/bodydata`
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    }     
+                }).then((Response)=>Response.json())
+                .then(v=>{
+                    if(v.data){
+                        let bodyData=JSON.parse(v.data);
+                        setBodyData(bodyData);
+                    }
+                })
+            }
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -130,7 +177,7 @@ const DataScreen = ({ navigation }) => {
                                 value={goal}
                                 onChangeText={(e) => { setGoal(e) }}
                                 onBlur={() => {
-                                    saveObjLikeData({ weight, height, goal }, "body_data")
+                                    saveObjLikeData({ goal }, "body_data")
                                 }}
                             ></TextInput>
                         </View>
@@ -165,7 +212,7 @@ const DataScreen = ({ navigation }) => {
                                         keyboardType="number-pad"
                                         onChangeText={e=>changeText(e,'weight')}
                                         onBlur={() => {
-                                            saveObjLikeData({ weight, height, goal }, "body_data");
+                                            saveBodyData();
                                             readOBjLikeData('history')
                                                 .then((v) => {
                                                     if (!v) {
@@ -204,7 +251,7 @@ const DataScreen = ({ navigation }) => {
                                         value={"" + bodyData.height}
                                         onChangeText={e=>changeText(e,'height')}
                                         onBlur={() => {
-                                            saveObjLikeData({ weight, height, goal }, "body_data");
+                                            saveBodyData();
                                             readOBjLikeData('history')
                                                 .then((v) => {
                                                     if (!v) {
@@ -268,7 +315,7 @@ const DataScreen = ({ navigation }) => {
                                 }}>
                                     <View>
                                         <View>
-                                            <Text style={styles.textTitle}>Last Sleep Time:</Text>
+                                            <Text style={styles.textTitle}>Sleep Time:</Text>
                                         </View>
                                         <View>
                                             <TextInput
@@ -278,7 +325,7 @@ const DataScreen = ({ navigation }) => {
                                                 value={"" + bodyData.lastSleepTime}
                                                 onChangeText={(e) => { changeText(e,'lastSleepTime')}}
                                                 onBlur={() => {
-                                                    saveObjLikeData({ weight, height, goal }, "body_data");
+                                                    saveBodyData();
                                                     readOBjLikeData('history')
                                                         .then((v) => {
                                                             if (!v) {
@@ -318,7 +365,7 @@ const DataScreen = ({ navigation }) => {
                                                 value={"" + bodyData.water}
                                                 onChangeText={(e) => { changeText(e,'water')}}
                                                 onBlur={() => {
-                                                    saveObjLikeData({ weight, height, goal }, "body_data");
+                                                    saveBodyData();
                                                     readOBjLikeData('history')
                                                         .then((v) => {
                                                             if (!v) {
@@ -359,7 +406,7 @@ const DataScreen = ({ navigation }) => {
                                             value={"" + bodyData.thighCir}
                                             onChangeText={(e) => { changeText(e,'thighCir')}}
                                             onBlur={() => {
-                                                saveObjLikeData({ weight, height, goal }, "body_data");
+                                                saveBodyData();
                                                 readOBjLikeData('history')
                                                     .then((v) => {
                                                         if (!v) {
@@ -399,7 +446,7 @@ const DataScreen = ({ navigation }) => {
                                             value={"" + bodyData.calfCir}
                                             onChangeText={(e) => { changeText(e,'calfCir')}}
                                             onBlur={() => {
-                                                saveObjLikeData({ weight, height, goal }, "body_data");
+                                                saveBodyData();
                                                 readOBjLikeData('history')
                                                     .then((v) => {
                                                         if (!v) {

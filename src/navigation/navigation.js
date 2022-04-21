@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import HomeScreen from "../screens/HomeScreen";
 import DataScreen from "../screens/DataScreen";
 import ChatScreen from "../screens/ChatScreen";
-import LoginScreen from './../screens/LoginScreen';
+
 
 const Tab = createBottomTabNavigator();
 
