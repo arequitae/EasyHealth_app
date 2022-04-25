@@ -2,8 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, SafeAreaView, ScrollView, Alert, TextInput } from 'react-native';
 import CardView from "react-native-cardview-wayne";
 import { getHeight, getWidth } from "../utils/Adapter";
-import { formatNowDate } from "../utils/DateUtils";
-import { readOBjLikeData, saveObjLikeData } from "../utils/dataStorage";
+import {  saveObjLikeData } from "../utils/dataStorage";
 import { CheckCalendar } from "../basicComponent/Calendar";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { getToken } from "../utils/Storage";
@@ -12,18 +11,38 @@ import { getToken } from "../utils/Storage";
 
 
 const alertData = (...args) => {
-    let map = args[0];
-    let key = args[1];
-    let arr = map.get(key);
-    if (arr) {
-        Alert.alert(
-            `${key}`,
-            `Your weight is ${arr[0]}kg and height is ${arr[1]}cm`
+    let historyList = args[0];
+    let daySelected = args[1];
+    
+    if(historyList.includes(daySelected)){
+        getToken()
+        .then(
+            (token)=>{
+                let url=`http://${global.serverUrl}/bodydata/history`
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    },
+                    body:JSON.stringify({saveTime:daySelected} )    
+                }).then((Response)=>Response.json())
+                .then(v=>{        
+                    if(v.data){
+                        let bodyData=v.data;    
+                        Alert.alert(
+                            `${daySelected}`,
+                            `Your weight is ${bodyData.weight}kg and height is ${bodyData.height}cm`
+                        )
+                    }
+                })
+            }
         )
     }
     else {
         Alert.alert(
-            `${key}`,
+            `${daySelected}`,
             `Your didn't save data!`
         )
     }
@@ -32,9 +51,9 @@ const alertData = (...args) => {
 
 
 const DataScreen = ({ navigation }) => {
-    const [weight, setWeight] = useState(0);
-    const [height, setHeight] = useState(0);
+    
     const [bodyData,setBodyData]=useState({
+        userName:"",
         weight:0,
         height:0,
         lastSleepTime:0,
@@ -43,68 +62,48 @@ const DataScreen = ({ navigation }) => {
         calfCir:0
     });
     const [goal, setGoal] = useState("")
-    const [history, setHistory] = useState(null);
+    const [history, setHistory] = useState([]);
     const changeText=(e,key)=>{
         let newBodyData={...bodyData}
         newBodyData[key]=e
         setBodyData(newBodyData);
-    }
-    const updateHistory = (v) => {
-
-        v = JSON.parse(v);
-        let len = v.length;
-        if (len >= 1 && v[len - 1][0] == formatNowDate('yyyy-MM-dd')) {
-            v[len - 1][1] = Number(weight);
-            v[len - 1][2] = Number(height)
-        }
-        else {
-            // if(len==7)
-            //     v.shift();
-            v.push([formatNowDate('yyyy-MM-dd'), Number(weight), Number(height)])
-        }
-        saveObjLikeData(v, 'history')
-            .then(readOBjLikeData.bind(null, 'history'))
-            .then((v) => {
-                let map = new Map();
-                v = JSON.parse(v)
-                for (let i of v) {
-                    map.set(i[0], [i[1], i[2]]);
-                }
-                setHistory(map)
-            }).catch((e) => { console.log(e) })
-    }
+    } 
 
     useEffect(() => {
-        readBodyData();
-        readOBjLikeData('body_data')
-            .then((v) => {
-                if (!v)
-                    return;
-                v = JSON.parse(v)
-                if (v.weight)
-                    setWeight(v.weight);
-                if (v.height)
-                    setHeight(v.height);
-                if (v.goal)
-                    setGoal(v.goal)
-            })
-        readOBjLikeData('history').then((v) => {
-            if (!v)
-                return;
-            let map = new Map();
-            v = JSON.parse(v)
-            for (let i of v) {
-                map.set(i[0], [i[1], i[2]]);
+        const unsubscribe = navigation.addListener('focus', () => {//当页面focus的时候重新获取数据
+            readBodyData();//读取详细数据
+            readRecordedList();//读取历史记录的日期
+        });
+      
+          return unsubscribe;//销毁
+    }, [navigation])
+    const readRecordedList=()=>{
+        getToken()
+        .then(
+            (token)=>{
+                let url=`http://${global.serverUrl}/bodydata/timelist`
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    }     
+                }).then((Response)=>Response.json())
+                .then(v=>{        
+                    if(v.data){
+                        let timeList=v.data;    
+                        setHistory(timeList);
+                    }
+                })
             }
-            setHistory(map)
-        }).catch((e) => { console.log(e) })
-    }, [])
-
+        )
+    }
     const saveBodyData=()=>{
         getToken()
         .then(
             (token)=>{
-                let url=`http://${global.serverUrl}/userdata/savebodydata`
+                let url=`http://${global.serverUrl}/bodydata/savelatest`
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -113,10 +112,8 @@ const DataScreen = ({ navigation }) => {
                         'Authorization':token
                     },
                     body: JSON.stringify(bodyData)
-                    // JSON.stringify({
-                    //    bodydata:JSON.stringify(bodyData)
-                    // })
-                });
+                }).then(readRecordedList);
+
             }
         )
         
@@ -126,7 +123,7 @@ const DataScreen = ({ navigation }) => {
         getToken()
         .then(
             (token)=>{
-                let url=`http://${global.serverUrl}/userdata/bodydata`
+                let url=`http://${global.serverUrl}/bodydata/latest`
                 fetch(url, {
                     method: 'GET',
                     headers: {
@@ -135,9 +132,9 @@ const DataScreen = ({ navigation }) => {
                         'Authorization':token
                     }     
                 }).then((Response)=>Response.json())
-                .then(v=>{
+                .then(v=>{        
                     if(v.data){
-                        let bodyData=JSON.parse(v.data);
+                        let bodyData=v.data;    
                         setBodyData(bodyData);
                     }
                 })
@@ -153,7 +150,7 @@ const DataScreen = ({ navigation }) => {
                 <View style={styles.profileInfos} row aCenter>
                     <Image style={styles.image} source={require('./1.jpg')} />
                     <View style={styles.nameSection}>
-                        <Text style={styles.textWelcome}>Hello, Kylie</Text>
+                        <Text style={styles.textWelcome}>Hello, {bodyData.userName}</Text>
                     </View>
                 </View>
                 {/* 目标 */}
@@ -211,18 +208,7 @@ const DataScreen = ({ navigation }) => {
                                         value={"" + bodyData.weight}
                                         keyboardType="number-pad"
                                         onChangeText={e=>changeText(e,'weight')}
-                                        onBlur={() => {
-                                            saveBodyData();
-                                            readOBjLikeData('history')
-                                                .then((v) => {
-                                                    if (!v) {
-                                                        saveObjLikeData([], 'history')
-                                                            .then(updateHistory.bind(null, "[]"));
-                                                        return;
-                                                    }
-                                                    updateHistory(v);
-                                                })
-                                        }}
+                                        onBlur={() => {saveBodyData();}}
                                     ></TextInput>
                                 </View>
                             </View>
@@ -250,19 +236,7 @@ const DataScreen = ({ navigation }) => {
                                         keyboardType="number-pad"
                                         value={"" + bodyData.height}
                                         onChangeText={e=>changeText(e,'height')}
-                                        onBlur={() => {
-                                            saveBodyData();
-                                            readOBjLikeData('history')
-                                                .then((v) => {
-                                                    if (!v) {
-                                                        saveObjLikeData([], 'history')
-                                                            .then(updateHistory.bind(null, "[]"));
-                                                        return;
-                                                    }
-                                                    updateHistory(v);
-                                                })
-
-                                        }}
+                                        onBlur={() => {saveBodyData();}}
                                     ></TextInput>
                                 </View>
                             </View>
@@ -324,19 +298,7 @@ const DataScreen = ({ navigation }) => {
                                                 keyboardType="number-pad"
                                                 value={"" + bodyData.lastSleepTime}
                                                 onChangeText={(e) => { changeText(e,'lastSleepTime')}}
-                                                onBlur={() => {
-                                                    saveBodyData();
-                                                    readOBjLikeData('history')
-                                                        .then((v) => {
-                                                            if (!v) {
-                                                                saveObjLikeData([], 'history')
-                                                                    .then(updateHistory.bind(null, "[]"));
-                                                                return;
-                                                            }
-                                                            updateHistory(v);
-                                                        })
-
-                                                }}
+                                                onBlur={() => {saveBodyData();}}
                                             ></TextInput>
                                         </View>
                                     </View>
@@ -364,19 +326,7 @@ const DataScreen = ({ navigation }) => {
                                                 keyboardType="number-pad"
                                                 value={"" + bodyData.water}
                                                 onChangeText={(e) => { changeText(e,'water')}}
-                                                onBlur={() => {
-                                                    saveBodyData();
-                                                    readOBjLikeData('history')
-                                                        .then((v) => {
-                                                            if (!v) {
-                                                                saveObjLikeData([], 'history')
-                                                                    .then(updateHistory.bind(null, "[]"));
-                                                                return;
-                                                            }
-                                                            updateHistory(v);
-                                                        })
-
-                                                }}
+                                                onBlur={() => {saveBodyData();}}
                                             ></TextInput>
                                         </View>
                                     </View>
@@ -405,19 +355,7 @@ const DataScreen = ({ navigation }) => {
                                             keyboardType="number-pad"
                                             value={"" + bodyData.thighCir}
                                             onChangeText={(e) => { changeText(e,'thighCir')}}
-                                            onBlur={() => {
-                                                saveBodyData();
-                                                readOBjLikeData('history')
-                                                    .then((v) => {
-                                                        if (!v) {
-                                                            saveObjLikeData([], 'history')
-                                                                .then(updateHistory.bind(null, "[]"));
-                                                            return;
-                                                        }
-                                                        updateHistory(v);
-                                                    })
-
-                                            }}
+                                            onBlur={() => {saveBodyData();}}
                                         ></TextInput>
                                     </View>
                                 </View>
@@ -445,19 +383,7 @@ const DataScreen = ({ navigation }) => {
                                             keyboardType="number-pad"
                                             value={"" + bodyData.calfCir}
                                             onChangeText={(e) => { changeText(e,'calfCir')}}
-                                            onBlur={() => {
-                                                saveBodyData();
-                                                readOBjLikeData('history')
-                                                    .then((v) => {
-                                                        if (!v) {
-                                                            saveObjLikeData([], 'history')
-                                                                .then(updateHistory.bind(null, "[]"));
-                                                            return;
-                                                        }
-                                                        updateHistory(v);
-                                                    })
-
-                                            }}
+                                            onBlur={() => {saveBodyData();}}
                                         ></TextInput>
                                     </View>
                                 </View>
@@ -473,7 +399,7 @@ const DataScreen = ({ navigation }) => {
 
                 <View style={{ padding: 8, margin: 8 }}>
                     <Text style={styles.textTitle}>Body Calendar</Text>
-                    {<CheckCalendar days={history ? Array.from(history.keys()) : []} callback={alertData.bind(null, history)} />}
+                    {<CheckCalendar days={history ? history : []} callback={alertData.bind(null, history)} />}
 
                 </View>
             </ScrollView>

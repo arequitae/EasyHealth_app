@@ -39,9 +39,9 @@ class RegisterScreen extends Component {
                             Must be at least 6 characters.
                         </FormControl.HelperText>
                        */}
-                        <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                        {/* <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                             At least 6 characters are required.
-                        </FormControl.ErrorMessage> 
+                        </FormControl.ErrorMessage>  */}
                     </Stack>
                 </FormControl>
             </Box>

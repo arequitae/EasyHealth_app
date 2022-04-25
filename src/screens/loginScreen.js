@@ -44,7 +44,7 @@ class LoginScreen extends Component {
                 data: {
                   token
                 },       
-                expires: 1000 * 3600
+                expires: 1000 * 3600 * 24
               }); 
 
             this.props.navigation.navigate("Tabs")
