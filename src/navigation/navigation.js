@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import HomeScreen from "../screens/HomeScreen";
 import DataScreen from "../screens/DataScreen";
 import ChatScreen from "../screens/ChatScreen";
+import HomeScreenV2 from './../screens/HomeScreen2';
 
 
 const Tab = createBottomTabNavigator();
@@ -60,7 +61,7 @@ const Tabs = () => {
 
       }}
     >
-      <Tab.Screen name='Home' component={HomeScreen} options={{
+      <Tab.Screen name="TODAY'S GOAL" component={HomeScreenV2} options={{
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: "center", justifyContent: "center", top: 10 }}>
             <Image

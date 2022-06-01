@@ -20,6 +20,11 @@ class LoginScreen extends Component {
      }
 
     loginCheck=()=>{
+        // 跳过登录
+        {
+            this.props.navigation.navigate("Tabs")
+            return;
+        }
         let loginUrl=`http://${global.serverUrl}/login`;
        
         fetch(loginUrl, {
