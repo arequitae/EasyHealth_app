@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import DataScreen from "../screens/DataScreen";
 import ChatScreen from "../screens/ChatScreen";
 import HomeScreenV2 from './../screens/HomeScreen2';
+import DetectionScreen from './../screens/DetectionScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -65,12 +66,12 @@ const Tabs = () => {
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: "center", justifyContent: "center", top: 10 }}>
             <Image
-              source={require('./home.png')}
+              source={require('../img/home.png')}
               resizeMode="contain"
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? '#e32f45' : '#748c94',
+                // tintColor: focused ? '#e32f45' : '#748c94',
               }}
             />
             <Text
@@ -82,20 +83,34 @@ const Tabs = () => {
       <Tab.Screen name='Chat' component={ChatScreen}
         options={{
           tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: "center", justifyContent: "center", top: 10 }}>
             <Image
-              source={require('./message.png')}
-              resizeMode="center"
+              source={require('../img/game.png')}
+              resizeMode="contain"
               style={{
-                width: 50,
-                height: 50,
-                tintColor: "#fff",
-
+                width: 25,
+                height: 25,
+                // tintColor: focused ? '#e32f45' : '#748c94',
               }}
             />
+            <Text
+              style={{ color: focused ? '#e32f45' : '#748c94', fontSize: 12, marginBottom: 15 }}>
+              GAME</Text>
+          </View>
+            // <Image
+            //   source={require('../img/game.png')}
+            //   resizeMode="center"
+            //   style={{
+            //     width: 50,
+            //     height: 50,
+            //     // tintColor: "#fff",
+
+            //   }}
+            // />
           ),
-          tabBarButton: (props) => (
-            <EHeathChatBarButton {...props} />
-          )
+          // tabBarButton: (props) => (
+          //   <EHeathChatBarButton {...props} />
+          // )
         }}
 
       />
@@ -103,12 +118,12 @@ const Tabs = () => {
         tabBarIcon: ({ focused }) => (
           <View style={{ alignItems: "center", justifyContent: "center", top: 10 }}>
             <Image
-              source={require('./profile.png')}
+              source={require('../img/profile.png')}
               resizeMode="contain"
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? '#e32f45' : '#748c94',
+                // tintColor: focused ? '#e32f45' : '#748c94',
               }}
             />
             <Text

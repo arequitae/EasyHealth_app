@@ -5,6 +5,7 @@ import Tabs from "./src/navigation/navigation";
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/registerScreen';
+import DetectionScreen from './src/screens/DetectionScreen';
 
 
 const stack = createStackNavigator();
@@ -18,6 +19,7 @@ class App extends Component {
             <stack.Screen name="Login" component={LoginScreen} />
             <stack.Screen name="Tabs" component={Tabs} />
             <stack.Screen name="Register" component={RegisterScreen} />
+            <stack.Screen name="CalDetect" component={DetectionScreen} />
           </stack.Navigator>
       </NavigationContainer>
     )

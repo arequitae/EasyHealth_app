@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
-import {StyleSheet, Text,View,ScrollView,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { getWidth,getHeight } from './../utils/Adapter';
 
-const HomeScreenV2=function(){
+const HomeScreenV2=function(props){
     const [calorie,setCalorie]=useState({
         target:'200-300',
         finished:'100'   
@@ -15,7 +15,9 @@ const HomeScreenV2=function(){
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Let's Start →</Text>
             <View style={styles.pressArea}>
-                <TouchableOpacity style={{...styles.Touchable,...styles.CalDet}}>
+                <TouchableOpacity style={{...styles.Touchable,...styles.CalDet}}
+                  onPress={()=>{props.navigation.navigate("CalDetect")}}
+                >
                     <Text style={{fontSize:18,color:'white'}}>Calorie Detection</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{...styles.Touchable,...styles.CusRec}}>
@@ -36,16 +38,28 @@ const HomeScreenV2=function(){
                     <Text style={styles.dataText}>{calorie.finished}</Text>
                 </View>  
             </View>
-            <Text style={styles.title}>Exercise Time(min)</Text>
+            <View style={styles.exerciseTitleArea}>
+                <Text style={styles.exerciseTitle}>Exercise Time(min)</Text>
+                <TouchableOpacity style={styles.addBtn} > 
+                    <Image
+                    source={require('../img/edit.png')}
+                    resizeMode="contain"
+                    style={{
+                        width: 30,
+                        height: 30,
+                    }}
+                    />
+                </TouchableOpacity>
+            </View>
             <View style={styles.dataArea}>
-            <View style={{...styles.subArea,borderRightWidth:2}}>
-                <Text style={styles.targetText}>TARGET</Text>
-                <Text style={styles.dataText}>{exercise.target}</Text>
-            </View>  
-            <View style={styles.subArea}>
-                <Text style={styles.finishedText}>FINISHED</Text>
-                <Text style={styles.dataText}>{exercise.finished}</Text>
-            </View> 
+                <View style={{...styles.subArea,borderRightWidth:2}}>
+                    <Text style={styles.targetText}>TARGET</Text>
+                    <Text style={styles.dataText}>{exercise.target}</Text>
+                </View>  
+                <View style={styles.subArea}>
+                    <Text style={styles.finishedText}>FINISHED</Text>
+                    <Text style={styles.dataText}>{exercise.finished}</Text>
+                </View> 
             </View>
         </ScrollView>
     );
@@ -118,7 +132,27 @@ const styles = StyleSheet.create({
         color:'black',
         fontWeight:'500',
 
+    },
+    exerciseTitleArea:{
+        width:getWidth(326),
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginTop:getHeight(17)
+    },
+    exerciseTitle:{
+        fontSize:20,
+        color:'black',
+        fontWeight:'700',
+    },
+    addBtn:{
+        width:30,
+        height:30,
+        justifyContent:'center',
+        alignItems:'center',
+
     }
+
 })
 
 export default HomeScreenV2; 
