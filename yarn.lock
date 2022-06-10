@@ -7028,6 +7028,13 @@ react-native-calendars@^1.1280.0:
   optionalDependencies:
     moment "^2.24.0"
 
+react-native-camera@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.npmmirror.com/react-native-camera/-/react-native-camera-4.2.1.tgz#caf74081f055e89d7e9b0cd5108965d808c60e90"
+  integrity sha512-+Vkql24PFYQfsPRznJCvPwJQfyzCnjlcww/iZ4Ej80bgivKjL9eU0IMQIXp4yi6XCrKi4voWXxIDPMupQZKeIQ==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-cardview-wayne@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/react-native-cardview-wayne/-/react-native-cardview-wayne-1.0.7.tgz#a6e7afbce9c0a0d7ffb9add3f0257c6dfcb6d10f"
@@ -7105,6 +7112,11 @@ react-native-gifted-chat@^0.16.3:
     react-native-parsed-text "0.0.22"
     react-native-typing-animation "^0.1.7"
     uuid "3.4.0"
+
+react-native-image-picker@^4.8.4:
+  version "4.8.4"
+  resolved "https://registry.npmmirror.com/react-native-image-picker/-/react-native-image-picker-4.8.4.tgz#ac52f1e265458e944664adf1dcd0a9ee408fe083"
+  integrity sha512-Mjh2j/sddyolb16EpmprWzbtyeFvW8Xgzr/8WNi9d6bR2FC/kL78cY/a+7Yzujg5ZDtT1MWys+eWw/qtfwgGiw==
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1, react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"

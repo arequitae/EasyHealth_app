@@ -72,7 +72,7 @@ const HomeScreenV2=function(props){
                     <Text style={{fontSize:18,color:'white'}}>Question Answering</Text>
                 </TouchableOpacity>
             </View>
-            <Text style={styles.title}>Calorie Intake(cal)</Text>
+            <Text style={styles.title}>Calorie Intake (cal)</Text>
             <View style={styles.dataArea}>
                 <View style={{...styles.subArea,borderRightWidth:2}}>
                     <Text style={styles.targetText}>TARGET</Text>
@@ -84,7 +84,7 @@ const HomeScreenV2=function(props){
                 </View>  
             </View>
             <View style={styles.exerciseTitleArea}>
-                <Text style={styles.exerciseTitle}>Exercise Time(min)</Text>
+                <Text style={styles.exerciseTitle}>Exercise Time (min)</Text>
                 {/* 修改锻炼时间，layer.show是用来显示弹窗的，然后传入exercise的setter和当前值，在layer中改变 */}
                 <TouchableOpacity style={styles.addBtn}
                 onPress={()=>layer.show({setExercise,exercise})}
