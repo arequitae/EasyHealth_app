@@ -1,8 +1,53 @@
-import React,{useState} from 'react'
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React,{useState,Component} from 'react'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
 import { getWidth,getHeight } from './../utils/Adapter';
+import { useLayer } from './../basicComponent/Dialog';
+
+class Layer extends Component {
+    constructor(props){
+        super(props);
+
+    }
+    state={
+        type:'',
+        time:''
+    }
+    render() {
+      return (
+        <View style={{borderWidth:5,borderColor:'#93c0b6',width: getWidth(300), height: getHeight(230), alignItems: 'center', justifyContent: 'space-around', borderRadius: 10, backgroundColor: '#fff'}}>
+            <View style={{flexDirection:'row',alignItems:'center',height:getHeight(50)}}>
+                <Text style={{fontSize: 20, color: '#000',width:getWidth(100),fontWeight:'500'}}>Type:</Text>
+                <TextInput style={{borderWidth:1,width:getWidth(100),fontSize:20,fontWeight:'500'}}
+                    onChangeText={(e)=>{this.setState({...this.state,type:e})}}
+                ></TextInput>
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center',height:getHeight(50)}}>
+                <Text style={{fontSize: 20, color: '#000',width:getWidth(100),fontWeight:'500'}}>Time(s):</Text>
+                <TextInput style={{borderWidth:1,width:getWidth(100),fontSize:20,fontWeight:'500'}}
+                    onChangeText={(e)=>{this.setState({...this.state,time:e})}}
+                ></TextInput>
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center',height:getHeight(40),justifyContent:'flex-end',width:'90%'}}>
+                {/* <TouchableOpacity style={{...styles.modalBtn,backgroundColor:'orange'}}>
+                    <Text style={{fontSize:20,color:'white'}}>Cancel</Text>
+                </TouchableOpacity> */}
+
+                {/* ok按钮修改target数据 */}
+                <TouchableOpacity style={{...styles.modalBtn,backgroundColor:'#2dc9eb'}}
+                    onPress={()=>{this.props.setExercise({...this.props.exercise,target:this.state.time})}}
+                >
+                    <Text style={{fontSize:20,color:'white',fontWeight:'500'}}>OK</Text>
+                </TouchableOpacity> 
+            </View>
+        </View>
+      );
+    }
+  }
+  
+
 
 const HomeScreenV2=function(props){
+    const layer=useLayer(Layer)
     const [calorie,setCalorie]=useState({
         target:'200-300',
         finished:'100'   
@@ -40,7 +85,10 @@ const HomeScreenV2=function(props){
             </View>
             <View style={styles.exerciseTitleArea}>
                 <Text style={styles.exerciseTitle}>Exercise Time(min)</Text>
-                <TouchableOpacity style={styles.addBtn} > 
+                {/* 修改锻炼时间，layer.show是用来显示弹窗的，然后传入exercise的setter和当前值，在layer中改变 */}
+                <TouchableOpacity style={styles.addBtn}
+                onPress={()=>layer.show({setExercise,exercise})}
+                > 
                     <Image
                     source={require('../img/edit.png')}
                     resizeMode="contain"
@@ -151,7 +199,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
 
-    }
+    },
+    modalBtn:{width:getWidth(60),height:getHeight(40),borderRadius:10,alignItems:'center',justifyContent:'center'}
 
 })
 

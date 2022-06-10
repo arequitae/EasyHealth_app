@@ -7133,6 +7133,11 @@ react-native-modal-dropdown@^1.0.2:
   dependencies:
     prop-types "^15.6.0"
 
+react-native-modal-layer@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npmmirror.com/react-native-modal-layer/-/react-native-modal-layer-1.0.8.tgz#88bd9afad13e5d3b9d6d0706dcf29c98cf7dd3a4"
+  integrity sha512-6OFcFu3Lz0EsapSsefjCLv3B01Kwh1yHMpPWavdIFEru7gp9SWxhV9CCI2Ntvem+nVbynneulQ3tKdr3P7MSGw==
+
 react-native-parsed-text@0.0.22:
   version "0.0.22"
   resolved "https://registry.npmjs.org/react-native-parsed-text/-/react-native-parsed-text-0.0.22.tgz"
