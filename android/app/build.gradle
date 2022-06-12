@@ -135,8 +135,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
-        missingDimensionStrategy 'react-native-camera', 'general' 
+        versionName "1.0" 
     }
     splits {
         abi {
@@ -216,6 +215,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    compile project(':react-native-image-picker')
 }
 
 // Run this once to be able to run the application with BUCK
@@ -226,10 +227,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-// 在文件末尾添加就行了（如果存在了无需再添加）
-allprojects {
-    repositories {
-        maven { url "https://www.jitpack.io" }
-        maven { url "https://maven.google.com" }
-    }
-}
+

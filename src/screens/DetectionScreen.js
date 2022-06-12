@@ -2,6 +2,9 @@ import React from 'react'
 import { ScrollView, View, StyleSheet, Image,TouchableOpacity,Text } from 'react-native';
 import { getWidth,getHeight } from '../utils/Adapter';
 import { useEffect, useState } from 'react';
+import { choosePhoto, takePhoto } from '../utils/uploadImg';
+
+
 
 const DetectionScreen=function(){
     const [food,setFood]=useState('');
@@ -11,6 +14,7 @@ const DetectionScreen=function(){
         fat:0,
         carbs:0
     });
+    const [uri,setUri]=useState('')
     useEffect(()=>{
         setFood('Apple');
         setNutrient({
@@ -25,15 +29,15 @@ const DetectionScreen=function(){
             <View style={styles.imgArea}>
                 <Image style={styles.img} 
                     source={{
-                        uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+                        uri
                     }}
                 />
             </View>
             <View style={styles.btnArea}>
-                   <TouchableOpacity style={styles.btn}>
+                   <TouchableOpacity style={styles.btn} onPress={takePhoto.bind(this,setUri)}>
                         <Text style={styles.btnText}>Camera</Text>
                    </TouchableOpacity>
-                   <TouchableOpacity style={styles.btn}>
+                   <TouchableOpacity style={styles.btn} onPress={choosePhoto.bind(this,setUri)}>
                         <Text style={styles.btnText}>Choose from Album</Text>
                    </TouchableOpacity>
             </View> 
