@@ -93,7 +93,7 @@ class LoginScreen extends Component {
             <ScrollView
             style={{ flex: 1, backgroundColor: "#fff" }}
             showsVerticalScrollIndicator={false}>
-            <ImageBackground source={require('./login.jpeg')}
+            <ImageBackground source={require('../img/login.jpeg')}
                 style={{ height: Dimensions.get("window").height / 2.5, }}>
             </ImageBackground>
             <View style={styles.bottomView}>

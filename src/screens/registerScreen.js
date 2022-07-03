@@ -80,7 +80,7 @@ class RegisterScreen extends Component {
             <ScrollView
                 style={{ flex: 1, backgroundColor: "#fff" }}
                 showsVerticalScrollIndicator={false}>
-                <ImageBackground source={require('./register.jpg')}
+                <ImageBackground source={require('../img/register.jpg')}
                     style={{ height: Dimensions.get("window").height / 2.5, }}>
                 </ImageBackground>
                 <View style={styles.bottomView}>

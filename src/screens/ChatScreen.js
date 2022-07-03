@@ -4,7 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { Dialogflow_V2 } from 'react-native-dialogflow';
 import { dialogflowConfig } from '../utils/env';
 import { saveObjLikeData,readOBjLikeData,DeleteData } from '../utils/dataStorage';
-const botAvater = require('./1.jpg')
+const botAvater = require('../img/1.jpg')
 
 const BOT = {
   _id: 2,

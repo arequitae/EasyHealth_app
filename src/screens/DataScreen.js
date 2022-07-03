@@ -148,7 +148,7 @@ const DataScreen = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: getHeight(29) }}>
                 <View style={styles.profileInfos} row aCenter>
-                    <Image style={styles.image} source={require('./1.jpg')} />
+                    <Image style={styles.image} source={require('../img/1.jpg')} />
                     <View style={styles.nameSection}>
                         <Text style={styles.textWelcome}>Hello, {bodyData.userName}</Text>
                     </View>

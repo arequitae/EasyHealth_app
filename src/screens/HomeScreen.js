@@ -170,7 +170,7 @@ const HomeScreen = ({ navigation }) => {
                                 <View style={{ alignItems: "center" }}>
                                     <Image
                                         style={{ margin: 5, height: 120, width: 200 }}
-                                        source={require('./tip1.png')} />
+                                        source={require('../img/tip1.png')} />
                                 </View>
 
                                 <Text style={styles.textCard}>Fever can lead to dehydration which can make the sufferer feel worse. Avoid dehydration by drinking plenty of water or an oral rehydration solution like CeraLyte, Pedialyte.</Text>
@@ -192,7 +192,7 @@ const HomeScreen = ({ navigation }) => {
                                 <View style={{ alignItems: "center" }}>
                                     <Image
                                         style={{ margin: 5, height: 120, width: 200 }}
-                                        source={require('./tip2.jpg')} />
+                                        source={require('../img/tip2.jpg')} />
                                 </View>
 
                                 <Text style={styles.textCard}>Oil pulling is an Ayurvedic remedy in which you swish oil in your mouth to remove harmful germs and bacteria from your mouth. It also whitens teeth and freshens breath.</Text>
@@ -214,7 +214,7 @@ const HomeScreen = ({ navigation }) => {
                                 <View style={{ alignItems: "center" }}>
                                     <Image
                                         style={{ margin: 5, height: 120, width: 200 }}
-                                        source={require('./tip3.png')} />
+                                        source={require('../img/tip3.png')} />
                                 </View>
                                 <Text style={styles.textCard}>The incidence rate of cervical cancer is only next to breast cancer in women. A large number of laboratory research data show that the immune response of HPV host plays a very important role in controlling HPV infection and related lesions.</Text>
                             </View>
@@ -235,7 +235,7 @@ const HomeScreen = ({ navigation }) => {
                                 <View style={{ alignItems: "center" }}>
                                     <Image
                                         style={{ margin: 5, height: 120, width: 200 }}
-                                        source={require('./tip4.png')} />
+                                        source={require('../img/tip4.png')} />
                                 </View>
                                 <Text style={styles.textCard}>1. Cup mask in hand and place it over your mouth.{"\n"}
                                     2. Place the mask in the palm of your hand so that the straps face the floor.{"\n"}

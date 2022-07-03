@@ -1,5 +1,5 @@
-import React from 'react'
-import { ScrollView, View, StyleSheet, Image,TouchableOpacity,Text } from 'react-native';
+import React from 'react';
+import {ScrollView, View, StyleSheet, Image, TouchableOpacity, Text, TextInput} from 'react-native';
 import { getWidth,getHeight } from '../utils/Adapter';
 import { useEffect, useState } from 'react';
 import { choosePhoto, takePhoto } from '../utils/uploadImg';
@@ -16,9 +16,9 @@ const DetectionScreen=function(){
     });
     const [uri,setUri]=useState('')
     useEffect(()=>{
-        setFood('Apple');
+        setFood('-');
         setNutrient({
-            energy:10,
+            energy:0,
             protein:0,
             fat:0,
             carbs:0
@@ -59,9 +59,14 @@ const DetectionScreen=function(){
                         </View>
                     </View>
             </View>
-            <TouchableOpacity style={{...styles.btn,backgroundColor:'#f5a55a',paddingHorizontal:40, marginTop:getHeight(20)}}>
-                        <Text style={styles.btnText}>ADD</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-around', marginTop:getHeight(20),width:'90%'}}>
+                <TextInput style={styles.addTextInput} placeholder={"  Food Weight(g)"}></TextInput>
+                <TouchableOpacity style={{...styles.btn,backgroundColor:'#f5a55a',paddingHorizontal:20}}>
+                    <Text style={styles.btnText}>ADD</Text>
+                </TouchableOpacity>
+
+            </View>
+
         </ScrollView>
     )
 }
@@ -126,6 +131,13 @@ const styles=StyleSheet.create({
         fontSize:18,
         fontWeight:"500",
         color:'black'
+    },
+    addTextInput:{
+        width:getWidth(189),
+        height:getHeight(40),
+        borderColor:'gray',
+        borderWidth: 2,
+        borderRadius: 16
     }
 })
 

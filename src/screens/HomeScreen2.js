@@ -65,7 +65,9 @@ const HomeScreenV2=function(props){
                 >
                     <Text style={{fontSize:18,color:'white'}}>Calorie Detection</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{...styles.Touchable,...styles.CusRec}}>
+                <TouchableOpacity style={{...styles.Touchable,...styles.CusRec}}
+                                  onPress={()=>{props.navigation.navigate("Recipe")}}
+                >
                     <Text style={{fontSize:18,color:'white'}}>Custom Recipes</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{...styles.Touchable,...styles.QA}}>
