@@ -26,7 +26,6 @@ class LoginScreen extends Component {
             return;
         }
         let loginUrl=`http://${global.serverUrl}/login`;
-       
         fetch(loginUrl, {
             method: 'POST',
             headers: {
@@ -40,9 +39,7 @@ class LoginScreen extends Component {
         })
         .then(response=>response.json())
         .then(body=>{
-            if(body.code!=200){
-                return Promise.reject(body.msg)
-            }
+            if(body.code!=200){return Promise.reject(body.msg)}
             let token=body.data;
             storage.save({
                 key: 'loginState', 
@@ -50,16 +47,12 @@ class LoginScreen extends Component {
                   token
                 },       
                 expires: 1000 * 3600 * 24
-              }); 
-
+              });
             this.props.navigation.navigate("Tabs")
         })
         .catch(
             e=>
-            {Alert.alert("Error",e)}
-        )
-    
-        
+            {Alert.alert("Error",e)})
     }
 
     Item1 = () => {

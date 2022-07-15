@@ -45,7 +45,7 @@ const DetectionScreen=function(){
                 <Text style={styles.resultTableTitleText}>Result</Text>
                     <View style={styles.resultTableTitle}>
                         <Text style={styles.resultTableTitleText}>Food</Text>
-                        <Text style={styles.resultTableTitleText}>Nutrients</Text>
+                        <Text style={styles.resultTableTitleText}>NRV</Text>
                     </View>
                     <View style={styles.resultTable}>
                         <View style={{...styles.resultTableColumn,borderRightWidth:2}}>

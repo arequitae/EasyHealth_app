@@ -72,8 +72,6 @@ class RegisterScreen extends Component {
             e=>
             {Alert.alert("Error",e)}
         )
-
-       
    }
     render() { 
         return (
