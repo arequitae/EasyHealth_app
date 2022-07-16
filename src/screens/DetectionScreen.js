@@ -3,10 +3,10 @@ import {ScrollView, View, StyleSheet, Image, TouchableOpacity, Text, TextInput} 
 import { getWidth,getHeight } from '../utils/Adapter';
 import { useEffect, useState } from 'react';
 import { choosePhoto, takePhoto } from '../utils/uploadImg';
+import Bar from '../basicComponent/Bar'
 
 
-
-const DetectionScreen=function(){
+const DetectionScreen=function(props){
     const [food,setFood]=useState('');
     const [nutrient,setNutrient]=useState({
         energy:0,
@@ -26,6 +26,7 @@ const DetectionScreen=function(){
     },[]);
     return(
         <ScrollView contentContainerStyle={styles.container}>
+            <Bar title={"Ingredient".toUpperCase()} goBack={props.navigation.goBack}/>
             <View style={styles.imgArea}>
                 <Image style={styles.img} 
                     source={{

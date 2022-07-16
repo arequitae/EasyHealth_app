@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import Card from "../basicComponent/Card";
 import {useLayer} from "../basicComponent/Dialog";
 import DietInfoLayer from "../basicComponent/DietInfoLayer";
+import Bar from "../basicComponent/Bar";
 
 function getData(query,setData){
 
@@ -32,7 +33,7 @@ function getData(query,setData){
         )
 }
 
-const RecipeScreen=function(){
+const RecipeScreen=function(props){
     const layer=useLayer(DietInfoLayer)
     const [data,setData]=useState([]);
     const [query,setQuery]=useState("");
@@ -77,7 +78,8 @@ const RecipeScreen=function(){
     })
     return(
         <ScrollView
-            contentContainerStyle={{flexDirection: 'column',alignItems: 'center',justifyContent: 'flex-start', marginTop:getHeight(20),width:'100%',paddingBottom:50}}>
+            contentContainerStyle={{flexDirection: 'column',alignItems: 'center',justifyContent: 'flex-start',width:'100%',height:'100%',paddingBottom:50,backgroundColor:'white'}}>
+            <Bar title="RECIPE" goBack={props.navigation.goBack}/>
             <View style={{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-around', marginTop:getHeight(20),width:'90%'}}>
                 <TextInput style={styles.addTextInput} placeholder={"Recipe Name"} onChangeText={(e)=>{setQuery(e)}}></TextInput>
                 <TouchableOpacity style={{...styles.btn,backgroundColor:'#f5a55a',paddingHorizontal:20}}

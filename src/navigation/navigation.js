@@ -5,7 +5,8 @@ import HomeScreen from "../screens/HomeScreen";
 import DataScreen from "../screens/DataScreen";
 import ChatScreen from "../screens/ChatScreen";
 import HomeScreenV2 from './../screens/HomeScreen2';
-import DetectionScreen from './../screens/DetectionScreen';
+import Game from "../screens/Game";
+
 
 
 const Tab = createBottomTabNavigator();
@@ -38,7 +39,7 @@ const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         "headerStyle":{
-          backgroundColor:"#fff",
+          backgroundColor:"#f8f8f8",
         },
         "headerTitleStyle":{
           textAlign:"center",
@@ -52,7 +53,7 @@ const Tabs = () => {
           {
             "display": "flex",
             "elevation": 0,
-            "backgroundColor": "#ffffff",
+            "backgroundColor": "#f8f8f8",
             "height": 60,
             ...style.shadow
 
@@ -95,7 +96,7 @@ const Tabs = () => {
             />
             <Text
               style={{ color: focused ? '#e32f45' : '#748c94', fontSize: 12, marginBottom: 15 }}>
-              GAME</Text>
+              CHAT</Text>
           </View>
             // <Image
             //   source={require('../img/game.png')}

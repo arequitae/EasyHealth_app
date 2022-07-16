@@ -8,6 +8,7 @@ import RegisterScreen from './src/screens/registerScreen';
 import DetectionScreen from './src/screens/DetectionScreen';
 import {ModalLayers} from 'react-native-modal-layer';
 import RecipeScreen from "./src/screens/RecipeScreen";
+import Game from "./src/screens/Game"
 
 const stack = createStackNavigator();
 
@@ -24,6 +25,8 @@ class App extends Component {
               <stack.Screen name="Register" component={RegisterScreen} />
               <stack.Screen name="CalDetect" component={DetectionScreen} />
               <stack.Screen name="Recipe" component={RecipeScreen}  />
+              <stack.Screen name="Detection" component={DetectionScreen} />
+              <stack.Screen name="Game" component={Game} />
       </stack.Navigator>
 
         </NavigationContainer>
