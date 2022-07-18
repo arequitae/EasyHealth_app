@@ -1,34 +1,28 @@
-## 2022/3/31
-### 丁峥元
-~~添加navigation~~
+# 项目描述
+基于React Native的跨平台应用程序。该App主要提供健康相关的功能，包括食物营养成分分析，卡路里管理，菜谱搜索和推荐，仿Flappy Bird游戏，身体数据记录和智能问答等功能。其中食物营养成分分析的实现使用YOLO框架进行目标识别；游戏部分基于react-native-game-engine实现，智能问答使用了Google提供的dialogflow API。
 
-~~聊天记录存储+删除~~
+**服务端仓库：**https://github.com/arequitae/Easyhealth_Server
 
-~~侧边滑动抽屉（提示需要优化，navigation自带的顶部导航栏我没办法控制子组件）~~
+# 功能模块
+## 登录注册
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/login.png) 
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/register.png) 
 
-~~尝试加入icon失败 link命令fail~~
+## 主页
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/home.png) 
 
-## 2022/4/4
-### DZY
-utils里面增加了宽度高度适配的函数，我以我的真机为标准了，调用就直接用getWidth(加你要的宽度)，height一样，data界面存储做好了，试一下能不能用
+## 营养成分检测
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/detecting.png) 
 
+## 游戏
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/game.png) 
 
-## 2022/6/1
-### D
-修改home
+## 菜谱推荐、搜索
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/recipe.png) 
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/recipeDetail.png) 
 
-## 2022/6/6-2022/6/10
-### D
-calorie检测页面大致做好了，**存在问题是没有导航栏和标题栏**，不知道怎么加到navigation里面去，~~home的修改exercise time的弹窗还没做~~
-提醒一下现在github的分支名是main
-弹窗修改做好了，组件需要安装，使用参考https://juejin.cn/post/6844903943256948749#heading-3
-Home的问题是卡路里摄入哪个地方修改是怎么操作，然后锻炼时间目前是只能修改target，你可以看一下HomeScreen2里面的逻辑，我写了注释，类型不知道在哪里体现
+## QA
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/QA.png) 
 
-
-**camera配置参考**：https://blog.csdn.net/qq_41327019/article/details/104487837
-https://www.dandelioncloud.cn/article/details/1418936196591579138
-照相功能写了个基本组件，目前是存在内存中的图象，应该是可以直接传服务器，我想就不用存到本地了，我先看看服务器怎么接受这个图片，再会过来看接口怎么对上 
-
-## 2022/6/12
-### D
-照相和系统照片的读取 显示 上传都好了
+## 用户数据
+![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/data.png) 
