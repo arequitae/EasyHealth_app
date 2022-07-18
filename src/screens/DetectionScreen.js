@@ -1,9 +1,10 @@
 import React from 'react';
-import {ScrollView, View, StyleSheet, Image, TouchableOpacity, Text, TextInput} from 'react-native';
+import {ScrollView, View, StyleSheet, Image, TouchableOpacity, Text, TextInput, Alert} from 'react-native';
 import { getWidth,getHeight } from '../utils/Adapter';
 import { useEffect, useState } from 'react';
 import { choosePhoto, takePhoto } from '../utils/uploadImg';
 import Bar from '../basicComponent/Bar'
+import {getToken} from "../utils/Storage";
 
 
 const DetectionScreen=function(props){
@@ -14,6 +15,7 @@ const DetectionScreen=function(props){
         fat:0,
         carbs:0
     });
+    const [gram,setGram]=useState(1)
     const [uri,setUri]=useState('')
     useEffect(()=>{
         setFood('-');
@@ -24,9 +26,33 @@ const DetectionScreen=function(props){
             carbs:0
         })
     },[]);
+    const addCal=function(){
+        let addGram=Math.ceil(nutrient.energy*gram/100);
+        getToken().
+        then(token => {
+            let url=`http://${global.serverUrl}/recipe/saveCalories?calories=${addGram}`
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization':token
+                },
+            }).then((Response)=>Response.json())
+                .then(v=>{
+                    if(v.data){
+                        console.log(v.data)
+                    }
+                })
+        })
+    }
+    const goBackFun=function(){
+        props.navigation.goBack();
+
+    }
     return(
         <ScrollView contentContainerStyle={styles.container}>
-            <Bar title={"Ingredient".toUpperCase()} goBack={props.navigation.goBack}/>
+            <Bar title={"Ingredient".toUpperCase()} goBack={goBackFun}/>
             <View style={styles.imgArea}>
                 <Image style={styles.img} 
                     source={{
@@ -35,10 +61,10 @@ const DetectionScreen=function(props){
                 />
             </View>
             <View style={styles.btnArea}>
-                   <TouchableOpacity style={styles.btn} onPress={takePhoto.bind(this,setUri)}>
+                   <TouchableOpacity style={styles.btn} onPress={takePhoto.bind(this,setUri,setNutrient)}>
                         <Text style={styles.btnText}>Camera</Text>
                    </TouchableOpacity>
-                   <TouchableOpacity style={styles.btn} onPress={choosePhoto.bind(this,setUri)}>
+                   <TouchableOpacity style={styles.btn} onPress={choosePhoto.bind(this,setUri,setNutrient,setFood)}>
                         <Text style={styles.btnText}>Choose from Album</Text>
                    </TouchableOpacity>
             </View> 
@@ -50,7 +76,10 @@ const DetectionScreen=function(props){
                     </View>
                     <View style={styles.resultTable}>
                         <View style={{...styles.resultTableColumn,borderRightWidth:2}}>
-                            <Text style={styles.tableText}>{food}</Text>
+                            { food==="Detecting ~~"?
+                                <Text style={{...styles.tableText,color:'orange',fontWeight:'700'}}>{food}</Text>:
+                                <Text style={styles.tableText}>{food}</Text>
+                            }
                         </View>
                         <View style={styles.resultTableColumn}>
                             <Text style={styles.tableText}>Energy: {nutrient.energy} kcal</Text>
@@ -61,8 +90,12 @@ const DetectionScreen=function(props){
                     </View>
             </View>
             <View style={{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-around', marginTop:getHeight(20),width:'90%'}}>
-                <TextInput style={styles.addTextInput} placeholder={"  Food Weight(g)"}></TextInput>
-                <TouchableOpacity style={{...styles.btn,backgroundColor:'#f5a55a',paddingHorizontal:20}}>
+                <TextInput style={styles.addTextInput} placeholder={"  Food Weight(g)"}
+                onChangeText={(e)=>{setGram(Number.parseFloat(e))}}
+                ></TextInput>
+                <TouchableOpacity style={{...styles.btn,backgroundColor:'#f5a55a',paddingHorizontal:20}}
+                onPress={addCal}
+                >
                     <Text style={styles.btnText}>ADD</Text>
                 </TouchableOpacity>
 
@@ -78,8 +111,11 @@ const styles=StyleSheet.create({
         alignItems:'center'
     },
     imgArea:{
+
+        borderWidth:1,
         width:getWidth(328),
-        height:getHeight(181)
+        height:getHeight(181),
+        marginVertical:20
     },
     img:{
         width:'100%',

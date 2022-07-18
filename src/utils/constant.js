@@ -1,2 +1,2 @@
 
-global.serverUrl='192.168.0.33:8887'
+global.serverUrl='59.110.125.136:8887'

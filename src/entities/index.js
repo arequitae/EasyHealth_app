@@ -18,14 +18,14 @@ export default restart => {
 
     let world = engine.world
 
-    world.gravity.y = 0.3;
+    world.gravity.y = 0.6;
 
     const pipeSizePosA = getPipeSizePosPair(-200)
     const pipeSizePosB = getPipeSizePosPair(windowWidth)
 
     return{
         physics: {engine, world},
-        Bird: Bird(world, {x:50, y:200},{height:40, width:40}),
+        Bird: Bird(world, {x:50, y:windowHeight/2},{height:40, width:40}),
         ObstacleTop1: Obstacle(world, 'ObstacleTop1',pipeSizePosA.pipeTop.pos,pipeSizePosA.pipeTop.size),
         ObstacleBottom1: Obstacle(world, 'ObstacleBottom1', pipeSizePosA.pipeBottom.pos,pipeSizePosA.pipeBottom.size),
 

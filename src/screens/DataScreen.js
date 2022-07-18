@@ -1,5 +1,15 @@
 import React, { Component, useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, SafeAreaView, ScrollView, Alert, TextInput } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    SafeAreaView,
+    ScrollView,
+    Alert,
+    TextInput,
+    TouchableOpacity
+} from 'react-native';
 import CardView from "react-native-cardview-wayne";
 import { getHeight, getWidth } from "../utils/Adapter";
 import {  saveObjLikeData } from "../utils/dataStorage";
@@ -140,6 +150,24 @@ const DataScreen = ({ navigation }) => {
                 })
             }
         )
+    }
+    const logout=function (){
+        getToken()
+            .then((token)=>{
+                let url=`http://${global.serverUrl}/logout?token=${token}`
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    }
+                }).then((Response)=>{
+                    console.log(Response.json());
+                    navigation.navigate("Login");
+                })
+
+            })
     }
 
     return (
@@ -400,8 +428,13 @@ const DataScreen = ({ navigation }) => {
                 <View style={{ padding: 8, margin: 8 }}>
                     <Text style={styles.textTitle}>Body Calendar</Text>
                     {<CheckCalendar days={history ? history : []} callback={alertData.bind(null, history)} />}
-
+                    <TouchableOpacity style={styles.btn}
+                                      onPress={logout}
+                    >
+                        <Text style={styles.btnText}>Log out</Text>
+                    </TouchableOpacity>
                 </View>
+
             </ScrollView>
         </SafeAreaView>
     )
@@ -489,6 +522,22 @@ const styles = StyleSheet.create({
     expand: {
         borderRadius: getWidth(20),
         color: "grey"
-    }
+    },
+    btn:{
+        height:getHeight(35),
+        width:"60%",
+        borderRadius:getWidth(8),
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#6fd0fa',
+        alignSelf:'center',
+        paddingHorizontal:20,
+        marginTop:20
+    },
+    btnText:{
+        fontSize:20,
+        color:'white',
+        paddingHorizontal:6,
+    },
 }
 )

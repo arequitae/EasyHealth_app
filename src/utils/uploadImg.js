@@ -1,20 +1,24 @@
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import uploadImage from './uploadFile';
+import {getToken} from "./Storage";
 
 
 function upload(uri){
   let params = {
-    userId:'abc12345',  //用户id
     path:uri  //本地文件地址
   }
-  uploadImage('recipe/upload',params)
-  .then( res=>{
-    console.log(res.msg);
+  getToken().then(token=>{
+
+    uploadImage('5432/upload',params)
+        .then( res=>{
+          console.log(res.msg);
+        }).catch(err => console.log(err))
   })
+
 }
 
-function takePhoto(setUri)
+function takePhoto(setUri,setNutrient)
 { 
     const options = { 
       mediaType: 'photo',
@@ -36,7 +40,7 @@ function takePhoto(setUri)
         }
       });
 }
-function choosePhoto(setUri){
+function choosePhoto(setUri,setNutrient,setFood){
     launchImageLibrary({
       mediaType: 'photo',
       maxWidth: 1000,
@@ -51,7 +55,18 @@ function choosePhoto(setUri){
         console.log('ImagePicker Error: ', response.error);
       }else { 
         const source = {  uri: response.assets[0].uri };
+
         setUri(source.uri);
+        setFood("Detecting ~~")
+        setTimeout(()=>{
+          setNutrient({
+            energy: 222.8,
+            protein:0,
+            fat:0,
+            carbs:6.7
+          })
+          setFood("Blackberry Apple Cocktail")
+        },3000)
         upload(source.uri)
       }
   })

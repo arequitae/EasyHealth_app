@@ -1,6 +1,7 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React, {useEffect,useState} from "react";
 import {getHeight, getWidth} from "../utils/Adapter";
+import {getToken} from "../utils/Storage";
 const Card=(props)=>{
     const [love,setLove]=useState(false);
     let addr="";
@@ -8,6 +9,27 @@ const Card=(props)=>{
         if(love)addr="../img/heart_green.png"
         else addr="../img/heart_white.png"
     },[love])
+    const likeRecipe=()=>{
+        setLove(!love);
+        if(!love){
+            getToken().then((token)=>{
+                let url=`http://${global.serverUrl}/recipe/like?id=${props.item.id}`
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':token
+                    },
+                }).then((Response)=>Response.json())
+                    .then(v=>{
+                        if(v.data){
+                            console.log(v.data)
+                        }
+                    })
+            })
+        }
+    }
     return(
         <TouchableOpacity  onPress={()=>{
             if(props.layer){
@@ -26,9 +48,7 @@ const Card=(props)=>{
                 {props.item.title}
             </Text>
             <TouchableOpacity style={styles.loveImg}
-            onPress={()=>{
-                setLove(!love);
-            }}
+            onPress={likeRecipe}
             >
                 {!love?
                 <Image style={{width:'100%',height:'100%'}}

@@ -1,7 +1,8 @@
-import React,{useState,Component} from 'react'
+import React, {useState, Component, useEffect} from 'react'
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
 import { getWidth,getHeight } from './../utils/Adapter';
 import { useLayer } from './../basicComponent/Dialog';
+import {getToken} from "../utils/Storage";
 
 class Layer extends Component {
     constructor(props){
@@ -10,8 +11,10 @@ class Layer extends Component {
     }
     state={
         type:'',
-        time:''
+        time:'',
     }
+
+
     render() {
       return (
         <View style={{borderWidth:5,borderColor:'#93c0b6',width: getWidth(300), height: getHeight(230), alignItems: 'center', justifyContent: 'space-around', borderRadius: 10, backgroundColor: '#fff'}}>
@@ -22,7 +25,7 @@ class Layer extends Component {
                 ></TextInput>
             </View>
             <View style={{flexDirection:'row',alignItems:'center',height:getHeight(50)}}>
-                <Text style={{fontSize: 20, color: '#000',width:getWidth(100),fontWeight:'500'}}>Time(s):</Text>
+                <Text style={{fontSize: 20, color: '#000',width:getWidth(100),fontWeight:'500'}}>Time(min):</Text>
                 <TextInput style={{borderWidth:1,width:getWidth(100),fontSize:20,fontWeight:'500'}}
                     onChangeText={(e)=>{this.setState({...this.state,time:e})}}
                 ></TextInput>
@@ -48,14 +51,72 @@ class Layer extends Component {
 
 const HomeScreenV2=function(props){
     const layer=useLayer(Layer)
-    const [calorie,setCalorie]=useState({
-        target:'200-300',
-        finished:'100'   
+
+    const [{calorieTarget,calorieFinished},setCalorie]=useState({
+        calorieTarget:'1320-1980',
+        calorieFinished:'0'
     })
     const [exercise,setExercise]=useState({
         target:60,
         finished:30
     })
+    const targetRequest= async function(token){
+        let url=`http://${global.serverUrl}/bodydata/latest`
+        let res="";
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':token
+            }
+        }).then((Response)=>Response.json())
+            .then(v=>{
+                if(v.data){
+                    let bodyData=v.data;
+                    // setCalorie({
+                    //     calorieTarget:,
+                    //     calorieFinished
+                    // });
+                    res=`${Math.ceil(bodyData.weight*22)}-${Math.ceil(bodyData.weight*33)}`
+                }
+            })
+        return res;
+    }
+    const finishRequest =async function(token,str){
+        let url=`http://${global.serverUrl}/recipe/getCalories`
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':token
+            }
+        }).then((Response)=>Response.json())
+            .then(v=>{
+                if(v.data){
+                    setCalorie({
+                        calorieTarget:str,
+                        calorieFinished:v.data
+                    });
+                }
+            })
+    }
+
+    useEffect(()=>{
+        const unsubscribe = props.navigation.addListener('focus', () => {//当页面focus的时候重新获取数据
+            getToken()
+                .then(
+                    (token)=>{
+                        targetRequest(token).then((str)=>{
+                            finishRequest(token,str)
+                        })
+
+                    }
+                )
+        });
+        return unsubscribe;//销毁
+    },[props.navigation])
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Let's Start →</Text>
@@ -63,7 +124,7 @@ const HomeScreenV2=function(props){
                 <TouchableOpacity style={{...styles.Touchable,...styles.CalDet}}
                   onPress={()=>{props.navigation.navigate("CalDetect")}}
                 >
-                    <Text style={{fontSize:18,color:'white'}}>Calorie Detection</Text>
+                    <Text style={{fontSize:18,color:'white'}}>Nutrients Detection</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{...styles.Touchable,...styles.CusRec}}
                                   onPress={()=>{props.navigation.navigate("Recipe")}}
@@ -71,7 +132,7 @@ const HomeScreenV2=function(props){
                     <Text style={{fontSize:18,color:'white'}}>Custom Recipes</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{...styles.Touchable,...styles.QA}}
-                                  onPress={()=>{props.navigation.navigate("Game")}}
+                                  onPress={()=>{props.navigation.navigate("Game",{target:calorieTarget})}}
                 >
                     <Text style={{fontSize:18,color:'white'}}>Game</Text>
                 </TouchableOpacity>
@@ -80,11 +141,11 @@ const HomeScreenV2=function(props){
             <View style={styles.dataArea}>
                 <View style={{...styles.subArea,borderRightWidth:2}}>
                     <Text style={styles.targetText}>TARGET</Text>
-                    <Text style={styles.dataText}>{calorie.target}</Text>
+                    <Text style={styles.dataText}>{calorieTarget}</Text>
                 </View>  
                 <View style={styles.subArea}>
                     <Text style={styles.finishedText}>FINISHED</Text>
-                    <Text style={styles.dataText}>{calorie.finished}</Text>
+                    <Text style={styles.dataText}>{calorieFinished}</Text>
                 </View>  
             </View>
             <View style={styles.exerciseTitleArea}>
