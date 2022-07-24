@@ -84,7 +84,6 @@ const DataScreen = ({ navigation }) => {
             readBodyData();//读取详细数据
             readRecordedList();//读取历史记录的日期
         });
-      
           return unsubscribe;//销毁
     }, [navigation])
     const readRecordedList=()=>{

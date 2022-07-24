@@ -46,8 +46,8 @@ const RecipeScreen=function(props){
     useEffect(()=>{
 
     },[])
-    const listCard=data.map((item,idx) =>{
-        return (<Card item={item} key={idx} layer={layer}></Card>)
+    const listCard=data.map((item) =>{
+        return (<Card item={item} key={item.id} layer={layer}></Card>)
     })
     const guessLike=()=>{
         let recipeUrl=`http://${global.serverUrl}/recipe/recommend`;
@@ -96,9 +96,11 @@ const RecipeScreen=function(props){
                     <Text style={styles.btnText}>Guess You Like ~</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{flexDirection: 'row',alignItems: 'center',justifyContent:'flex-start',flexWrap:'wrap',width:getWidth(330),marginTop:20}}>
+
+            <View style={styles.cardList}>
                 {listCard}
             </View>
+
         </ScrollView>
 
     )
@@ -125,5 +127,6 @@ const styles=StyleSheet.create({
         borderRadius: 16,
         paddingLeft:20,
         fontSize: 18
-    }
+    },
+    cardList:{flexDirection: 'row',alignItems: 'center',justifyContent:'flex-start',flexWrap:'wrap',width:getWidth(330),marginTop:20}
 })
