@@ -4,7 +4,31 @@
 Cross platform application based on react native. The app mainly provides health-related functions, including food nutrition analysis, calorie management, menu search and recommendation, flappy bird imitation game, body data recording, intelligent question answering and other functions. Among them, the realization of food nutrition analysis uses Yolo framework for target recognition; The game part is based on react native game engine, and intelligent question answering uses the dialogflow API provided by Google.
 
 
-**服务端仓库：** https://github.com/arequitae/Easyhealth_Server
+**服务端仓库 Server's Repository：** https://github.com/arequitae/Easyhealth_Server
+
+
+# Reference of Code 
+**Game Part:**
+
+- src/screens/Game.js; src/utils/random.js
+
+- src/entities/index.js
+
+- src/components/*
+
+- src/physics.js
+
+
+`FlappyBirdClonePublic [Source Code]
+https://github.com/SimCoderYoutube/FlappyBirdClone`
+
+**Intelligent Question-Answering Part:**
+
+src/screens/ChatScreen.js
+
+`DialogFlow [Document] 
+https://dialogflow.cloud.google.com/`
+
 
 # 功能模块 Modules
 ## 登录注册 Login & Registration
@@ -29,3 +53,4 @@ Cross platform application based on react native. The app mainly provides health
 
 ## 用户数据 User Data
 ![image](https://github.com/arequitae/EasyHealth_app/blob/main/markdownImg/data.png) 
+
